@@ -1,6 +1,9 @@
 from socket import gethostname
-from ConfigParser import ConfigParser
-from StringIO import StringIO
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+import itertools
 
 server_type = "bacula"
 
@@ -14,10 +17,8 @@ conf = {
             'email_server': "127.0.0.1"
        }
 
-zcfg = ConfigParser()
-with open(conf['zabbix_agent_conf']) as stream:
-    fakefile = StringIO("[global]\n" + stream.read())
-    zcfg.readfp(fakefile)
+zcfg = configparser.ConfigParser()
+zcfg.readfp(itertools.chain(['[global]'], open(conf['zabbix_agent_conf'])))
 zserver = zcfg.get('global', 'server').split(',')[0]
 
 conf['hostname'] = gethostname()

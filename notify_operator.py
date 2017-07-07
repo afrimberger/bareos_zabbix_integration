@@ -33,12 +33,6 @@ logging.basicConfig(
                    )
 logging.info('sys.argv: ' + repr(sys.argv))
 
-# Handle incorrect call
-# zbxsend is broken in 3.x (https://github.com/alledm/zbxsend/commit/a485c97a4f0c2fa46fe3192da9979cbeade752b4)
-if sys.version_info >= (3,):
-    logging.warn("Need python version 2.x to run")
-    quit(1)
-
 parser = argparse.ArgumentParser(
             formatter_class=RawTextHelpFormatter,
             description=
