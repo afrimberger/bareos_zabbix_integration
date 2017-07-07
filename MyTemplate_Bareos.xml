@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2015-04-08T08:43:18Z</date>
+    <date>2015-05-28T18:15:28Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -9,8 +9,71 @@
     </groups>
     <templates>
         <template>
-            <template>MyTemplate_Bareos</template>
-            <name>MyTemplate_Bareos</name>
+            <template>MyTemplate_Bareos_Client</template>
+            <name>MyTemplate_Bareos_Client</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Bareos client</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Bareos client is running</name>
+                    <type>7</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>net.tcp.port[,9102]</key>
+                    <delay>600</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Bareos client</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+            </items>
+            <discovery_rules/>
+            <macros/>
+            <templates/>
+            <screens/>
+        </template>
+        <template>
+            <template>MyTemplate_Bareos_Server</template>
+            <name>MyTemplate_Bareos_Server</name>
             <groups>
                 <group>
                     <name>Templates</name>
@@ -19,6 +82,9 @@
             <applications>
                 <application>
                     <name>Bareos director</name>
+                </application>
+                <application>
+                    <name>Bareos storage</name>
                 </application>
             </applications>
             <items>
@@ -65,6 +131,92 @@
                     <valuemap/>
                     <logtimefmt/>
                 </item>
+                <item>
+                    <name>Bareos director is running</name>
+                    <type>7</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>net.tcp.port[,9101]</key>
+                    <delay>600</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Bareos director</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>Bareos storage is running</name>
+                    <type>7</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>net.tcp.port[,9103]</key>
+                    <delay>600</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>3</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Bareos storage</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
             </items>
             <discovery_rules>
                 <discovery_rule>
@@ -93,7 +245,7 @@
                     <privatekey/>
                     <port/>
                     <filter>:</filter>
-                    <lifetime>30</lifetime>
+                    <lifetime>1</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
@@ -486,7 +638,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{MyTemplate_Bareos:bareos.job_exit_code[{#JOBNAME}].str(OK)}=0</expression>
+                            <expression>{MyTemplate_Bareos_Server:bareos.job_exit_code[{#JOBNAME}].str(OK)}=0</expression>
                             <name>Backup error for job [{#JOBNAME}] on {HOSTNAME}</name>
                             <url/>
                             <status>0</status>
@@ -495,7 +647,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{MyTemplate_Bareos:bareos.job_exit_code[{#JOBNAME}].nodata(129600)}#0</expression>
+                            <expression>{MyTemplate_Bareos_Server:bareos.job_exit_code[{#JOBNAME}].nodata(129600)}#0</expression>
                             <name>Backup job [{#JOBNAME}] was not started for 36 hours on {HOSTNAME}</name>
                             <url/>
                             <status>0</status>
@@ -504,7 +656,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{MyTemplate_Bareos:bareos.fd_errors_non_fatal[{#JOBNAME}].last(0)}#0</expression>
+                            <expression>{MyTemplate_Bareos_Server:bareos.fd_errors_non_fatal[{#JOBNAME}].last(0)}#0</expression>
                             <name>Bareos job [{#JOBNAME}] FD non-fatal error on {HOSTNAME}</name>
                             <url/>
                             <status>0</status>
@@ -513,7 +665,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{MyTemplate_Bareos:bareos.sd_errors[{#JOBNAME}].last(0)}#0</expression>
+                            <expression>{MyTemplate_Bareos_Server:bareos.sd_errors[{#JOBNAME}].last(0)}#0</expression>
                             <name>Bareos job [{#JOBNAME}] SD errors on {HOSTNAME}</name>
                             <url/>
                             <status>0</status>
@@ -533,11 +685,41 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{MyTemplate_Bareos:bareos.custommessage.regexp(&quot;^0$&quot;)}=0</expression>
+            <expression>{MyTemplate_Bareos_Client:net.tcp.port[,9102].count(10m,1)}=0</expression>
+            <name>Bareos client is down</name>
+            <url/>
+            <status>0</status>
+            <priority>3</priority>
+            <description/>
+            <type>0</type>
+            <dependencies/>
+        </trigger>
+        <trigger>
+            <expression>{MyTemplate_Bareos_Server:bareos.custommessage.regexp(&quot;^0$&quot;)}=0</expression>
             <name>Bareos custom message on {HOSTNAME}: [{ITEM.LASTVALUE}]. Set to 0 to reset trigger.</name>
             <url/>
             <status>0</status>
             <priority>4</priority>
+            <description/>
+            <type>0</type>
+            <dependencies/>
+        </trigger>
+        <trigger>
+            <expression>{MyTemplate_Bareos_Server:net.tcp.port[,9101].count(10m,1)}=0</expression>
+            <name>Bareos director is down</name>
+            <url/>
+            <status>0</status>
+            <priority>3</priority>
+            <description/>
+            <type>0</type>
+            <dependencies/>
+        </trigger>
+        <trigger>
+            <expression>{MyTemplate_Bareos_Server:net.tcp.port[,9103].count(10m,1)}=0</expression>
+            <name>Bareos storage is down</name>
+            <url/>
+            <status>0</status>
+            <priority>3</priority>
             <description/>
             <type>0</type>
             <dependencies/>
