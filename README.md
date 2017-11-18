@@ -1,4 +1,4 @@
-bareos/bacula zabbix_integration
+bareos/bareos zabbix_integration
 =========================
 
 Scripts and template to integrate bareos/bacula with zabbix.

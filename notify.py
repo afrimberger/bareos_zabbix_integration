@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.4
 
 import sys
 import subprocess
@@ -9,14 +9,23 @@ from argparse import RawTextHelpFormatter
 import logging
 import smtplib
 from email.mime.text import MIMEText
-from zbxsend import Metric, send_to_zabbix
+import tempfile
+import subprocess
 
 # Settings
 from conf import conf
 
-def sendmail(jname, jtype, jlevel, jexit_code, jmsg, recipients):
-    subject = "Bareos: {0} {1} of {2} {3}".format(jlevel, jtype, jname, jexit_code)
-    logging.debug( "sending email ({0}) to '{1}'".format(subject, recipients) )
+
+# Example used for testing:
+# cat test/report-some.host.txt | ./notify.py "some.host" "Backup" "F" "OK"
+
+def sendmail(jname, jtype, jlevel, jexit_code, jmsg, recipients, job_client):
+    if job_client:
+        subject = "Bareos: {0} {1} of {2} on {3} {4}".format(jtype, jexit_code, jname, job_client, jlevel)
+    else:
+        subject = "Bareos: {0} {1} of {2} {3}".format(jtype, jexit_code, jname, jlevel)
+    
+    logging.debug("sending email ({0}) to '{1}'".format(subject, recipients))
 
     msg = MIMEText(jmsg)
     msg['Subject'] = subject
@@ -26,6 +35,24 @@ def sendmail(jname, jtype, jlevel, jexit_code, jmsg, recipients):
     s = smtplib.SMTP( conf['email_server'] )
     s.sendmail( conf['email_from'], recipients, msg.as_string() )
     s.quit()
+
+
+def send_to_zabbix(metrics):
+    with tempfile.NamedTemporaryFile(delete=True) as f:
+        for k, v in metrics.items():
+            f.write(bytes("%s %s %s\n" % (conf['hostname'], k, v), 'UTF-8'))
+
+        f.flush()
+        print(f.name)
+        cmd = ['zabbix_sender', '-z', conf['zabbix_server'], '-i', f.name]
+        cmd.append(conf['zabbix_send_opts'])
+        if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+            cmd.append('-vv')
+        print(cmd)
+        logging.info("sending metrics to '{0}': '{1}'".format(conf['zabbix_server'], metrics))
+        subprocess.check_call(cmd)
+        #send_to_zabbix(metrics, conf['zabbix_server'], 10051, 20)
+
 
 logging.basicConfig(
     format=u'%(levelname)-8s [%(asctime)s] %(message)s',
@@ -40,7 +67,7 @@ parser = argparse.ArgumentParser(
 """Simple script to send Bareos reports to Zabbix.
 Should be used in Bareos-dir config instead of mail command:
     mail = <admin@localhost> = all, !skipped
-    mailcommand = "{0} '%n' '%t' '%l' '%e' [--recipients '%r'] [--email-on-fail] [--email-on-success]"
+    mailcommand = "{0} '%n' '%t' '%l' '%e' [--job-client '%c'] [--recipients '%r'] [--email-on-fail] [--email-on-success]"
 Hostnames in Zabbix and Bareos must correspond
 """.format(os.path.realpath(__file__))
                                 )
@@ -50,6 +77,8 @@ parser.add_argument('job_type', help='job type (%%t)')
 parser.add_argument('job_level', help='job level (%%l)')
 parser.add_argument('job_exit_code', help='job exit code (%%e)')
 
+parser.add_argument('--job-client',
+                    help='job client (%%c)')
 parser.add_argument('--recipients',
                     action='store',
                     type=lambda x: x.split(),
@@ -126,16 +155,23 @@ logging.debug(repr(in_msg))
 # DEBUG
 logging.debug(repr(result))
 
-metrics = []
+metrics = dict()
 for key, value in result.items():
-    metrics.append( Metric(conf['hostname'], '{0}[{1}]'.format(key, args.job_name), value) )
+    k = '{0}[{1}]'.format(key, args.job_name)
+    metrics[k] = value
 
 # Send result to zabbix
 logging.info( "sending metrics to '{0}': '{1}'".format(conf['zabbix_server'], metrics) )
-send_to_zabbix(metrics, conf['zabbix_server'], 10051, 20)
+try:
+    send_to_zabbix(metrics)
+except subprocess.CalledProcessError as e:
+    msg = "Failed sending metrics to Zabbix Server\n metrics=%s:\n command=%s" % (metrics, e)
+    print(msg)
+    logging.error(msg)
+
 
 # Send emails (if requested)
 if (args.recipients and
     ((args.job_exit_code == 'OK' and args.email_on_success) or
      (args.job_exit_code != 'OK' and args.email_on_fail))):
-    sendmail(args.job_name, args.job_type, args.job_level, args.job_exit_code, in_msg, args.recipients)
+    sendmail(args.job_name, args.job_type, args.job_level, args.job_exit_code, in_msg, args.recipients, args.job_client)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 import os
@@ -8,7 +8,7 @@ from argparse import RawTextHelpFormatter
 import smtplib
 import logging
 from email.mime.text import MIMEText
-from zbxsend import Metric, send_to_zabbix
+from zbxsend import Metric, send_to_zabbix # TODO: Migrate to zabbix_sender (analogous to notify.py)
 
 # Settings
 from conf import conf
