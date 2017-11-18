@@ -45,7 +45,7 @@ def send_to_zabbix(metrics):
         f.flush()
         print(f.name)
         cmd = ['zabbix_sender', '-z', conf['zabbix_server'], '-i', f.name]
-        cmd.append(conf['zabbix_send_opts'])
+        cmd += conf['zabbix_send_opts']
         if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
             cmd.append('-vv')
         print(cmd)
